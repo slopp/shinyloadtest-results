@@ -14,3 +14,6 @@ The contents of the repo are as follows:
 - **Result data**: Folders with the playback logs. One folder per test. Named `<users>_<cores>`.
 
 Testing infrastructure is documented in the [shinyloadtest-cloud](https://github.com/rstudio/shinyloadtest-cloud) repo.
+
+The application used in the tests is available at: https://github.com/wch/shiny_demo.
+
