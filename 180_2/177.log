@@ -1,0 +1,7 @@
+# --sessions 180 --app-url=http://shinyloadtest.rstudioservices.com/cran_explorer --output-dir test180 --overwrite-output --log-level warn --start-interval 500 15min.log
+thread_id,event,timestamp,input_line_number,comment
+177,PLAYER_SESSION_CREATE,1516215133907
+177,PLAYER_START_INTERVAL_START,1516215133907
+177,PLAYER_START_INTERVAL_END,1516215222407
+177,REQ_HOME_START,1516215222407,2
+177,PLAYER_FAIL,1516215222422,2
