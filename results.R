@@ -22,25 +22,34 @@ prepare <- function(test_logs, ratio = 1) {
   
   all %>% 
     group_by(!!grouping) %>% 
-    summarise(avg = mean(latency), med = median(latency)) %>% 
+    summarise(avg = mean(latency), 
+              med = median(latency),
+              upper = quantile(latency, 0.75),
+              lower = quantile(latency, 0.25)) %>% 
     right_join(all)
 }
 
 latency_plot <- function(prepped, title, grouping) {
-  facet <- paste0(grouping, '~ .')
-  
+  #facet <- paste0(grouping, '~ .')
+  facet <- grouping
   ggplot(prepped) + 
     geom_density(aes_string(group = grouping, x = "latency")) +
     geom_point(aes_string(group = grouping, x = "avg"), y = 0.5) +
     geom_point(aes_string(group = grouping, x = "med"), y = 0.5, color = 'red') +
-    facet_grid(facet) +
+    facet_wrap(facet, 
+      labeller = function(l){map_df(l, ~paste0(as.character(.x), ' ', grouping))},
+      ncol = 1
+    ) +
     scale_y_continuous(breaks = NULL) + 
     labs(
-      title = title,
+      title = NULL,
       caption = 'Red - Median; Black - Mean', 
       x = 'Latency (Secs)', 
       y = NULL
-    )
+    ) +
+   theme(
+       text = element_text(size = 20)
+   )
 }
 
 
@@ -67,7 +76,37 @@ latency_plot(nocache_single, 'Latency vs # of Users for 1 R process', 'users')
 
 nocache_many <- prepare(list(o_30_1, o_60_2,o_90_3,o_120_4,o_150_5, o_180_6, o_210_7, o_240_8), ratio = 30)
 
-latency_plot(nocache_many, 'Nearly Linear Scaling: Latency vs # of R Procs (30 Users / Proc)', 'r_procs')
+latency_plot(nocache_many, 'Nearly Linear Scaling: Latency vs # of R Procs (30 Users / Proc)', 'users')
+
+# Some linear scaling plots
+nocache_many %>% 
+  select(users, Median = med, Average = avg, `75th Percentile` = upper, `25th Percentile` = lower) %>% 
+  unique() %>% 
+  ggplot() + 
+    geom_line(aes(users, Median), color = 'red') +
+    geom_line(aes(users, Average), color = 'black') +
+    geom_errorbar(aes(users, ymax = `75th Percentile`, ymin = `25th Percentile`), alpha = 0.35) +
+    labs(
+      title = NULL,
+      x = 'Users',
+      y = 'Latency (Secs)'
+    ) + 
+    theme_minimal() +
+    theme(text = element_text(size = 20)) 
+
+data.frame(
+  r_processes = 1:8,
+  users = 540*1:8
+) %>% 
+  ggplot() + 
+    geom_line(aes(r_processes, users))  +
+    labs(
+      title = NULL,
+      x = 'R Processes',
+      y = 'Users'
+    ) +
+    theme_minimal() +
+    theme(text = element_text(size = 20)) 
 
 
 # -- Next, look at the same metrics, but for the cache optimized app

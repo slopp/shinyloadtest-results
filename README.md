@@ -1,11 +1,12 @@
 # Shiny Load Test Results
 
-This repository supports a talk given at the 2018 rstudio::conf. The best place to start is the [video of the talk]() as well as the pdf slides.
+This repository supports a talk given at the 2018 rstudio::conf. The best place to start is the [video of the talk](https://rstudio.com/resources/webinars) as well as the pdf slides.
 
 The contents of the repo are as follows:
 
 - **slides.pdf**: Slides from the talk
-- **recorder**: Mac binary of the shinyloadtest recorder. The shinyloadtest software will be released separately, this binary is for historical reproducility only.
+- **recorder**: Mac binary of the shinyloadtest recorder. The shinyloadtest software will be released separately, this binary is for historical reproducibility only.
+- **player**: The Java jar file used for playback. The shinyloadtest software will be released separately, this jar file is for historical reproducibility only.
 - **beep.R**: R code to help record a test with "normal" user pauses.
 - **analyse.R**: Helper functions to analyse the playback logs.
 - **results.R**: Main script which produces the result plots in `slides.pdf`.
